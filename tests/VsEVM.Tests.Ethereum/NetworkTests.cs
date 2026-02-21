@@ -1,6 +1,8 @@
+using VsEVM.Ethereum;
+
 using static VsEVM.Result;
 
-namespace VsEVM.Ethereum.Test
+namespace VsEVM.Tests.Ethereum
 {
     public class NetworkTests
     {

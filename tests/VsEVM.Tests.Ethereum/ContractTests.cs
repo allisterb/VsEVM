@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VsEVM.Ethereum.Test
+using VsEVM.Ethereum;
+
+namespace VsEVM.Tests.Ethereum
 {
     public class ContractTests
     {

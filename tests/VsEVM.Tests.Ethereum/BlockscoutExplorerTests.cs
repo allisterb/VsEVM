@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using VsEVM.Ethereum.Explorers;
 
-namespace VsEVM.Ethereum.Test
+namespace VsEVM.Tests.Ethereum
 {
     public class BlockscoutExplorerTests
     {
