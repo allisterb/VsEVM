@@ -416,3 +416,9 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+
+# Project
+**/launchSettings.json
+**/dotnet-tools.json
+/src/VsEVM.BuildTasks/Properties/launchSettings.json
