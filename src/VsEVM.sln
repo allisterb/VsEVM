@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VsEVM.Tests.BuildTasks", ".
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VsEVM.SolidityFileItemTemplate", "VsEVM.SolidityFileItemTemplate\VsEVM.SolidityFileItemTemplate.csproj", "{72198956-89B5-48F4-B209-A963504B5279}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VsEVM.SolidityProjectTemplate", "VsEVM.SolidityProjectTemplate\VsEVM.SolidityProjectTemplate.csproj", "{90BA4A89-26AA-4E2D-86EF-F5CC2420EB61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{72198956-89B5-48F4-B209-A963504B5279}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72198956-89B5-48F4-B209-A963504B5279}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72198956-89B5-48F4-B209-A963504B5279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90BA4A89-26AA-4E2D-86EF-F5CC2420EB61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90BA4A89-26AA-4E2D-86EF-F5CC2420EB61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90BA4A89-26AA-4E2D-86EF-F5CC2420EB61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90BA4A89-26AA-4E2D-86EF-F5CC2420EB61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{20DC3B3F-95C7-27D7-CC88-BD56E3D4AF5F} = {C8EF9B1D-DB12-4DD0-AFB1-CF105FA9D9FF}
 		{A9586C41-8192-2644-74C7-D5A69DE8430C} = {C8EF9B1D-DB12-4DD0-AFB1-CF105FA9D9FF}
 		{72198956-89B5-48F4-B209-A963504B5279} = {324737DF-8DE5-435F-A30C-40AA3E22418E}
+		{90BA4A89-26AA-4E2D-86EF-F5CC2420EB61} = {324737DF-8DE5-435F-A30C-40AA3E22418E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59B9FDF3-2BE8-4EFA-AD36-9AB47885530E}
