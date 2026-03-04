@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="VsEVM.UI.DeploySolidityProjectToolWindowControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:vsevmui="clr-namespace:VsEVM.UI;assembly="
+             Foreground="{DynamicResource {x:Static vsevmui:VSTheme.ToolWindowTextKey}}"
+             Background="{DynamicResource {x:Static vsevmui:VSTheme.ToolWindowBackgroundKey}}">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="{x:Static vsevmui:VSTheme.ApplicationThemeGuess}" />
+                <ui:ControlsDictionary />
+                <ResourceDictionary Source="/VsEVM.StratisEVM;component/UI/DialogWindowResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical" Grid.Row="0" Name="DeploySolidityProjectDialogStackPanel" Style="{DynamicResource DialogStyle}" Visibility="Hidden">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <StackPanel Orientation="Vertical" Name="ProjectEVMVersionStackPanel" Visibility="Hidden">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Project EVM version is:" Margin="4,0,0,2"/>
+                        <Label Name="ProjectEVMVersionLabel" Margin="1,0,0,0" Content="london" FontWeight="Bold" />
+                        <ui:SymbolIcon Symbol="Info12" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" ToolTip="Make sure the network you are deploying to supports this EVM version or deployment will fail."/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Label Content="Select the contract to deploy:"  Margin="4,0,0,2" />
+                    <ComboBox x:Name="DeployContractComboBox"  Margin="4,0,0,2" Width="250" FontSize="{DynamicResource {x:Static vsshell:VsFonts.CaptionFontSizeKey}}" SelectionChanged="DeployContractComboBox_SelectionChanged" />
+                </StackPanel>
+
+                <StackPanel x:Name="ContractDeployParamsStackPanel" Orientation="Vertical"  VerticalAlignment="Top" HorizontalAlignment="Left">
+                </StackPanel>
+                <Separator />
+
+                <StackPanel Orientation="Vertical"  VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Label Content="Select the deploy profile:"  Margin="4,0,0,2" />
+                    <ComboBox x:Name="DeployProfileComboBox" GotFocus="DeployProfileComboBox_GotFocus" Margin="4,0,0,2" Width="200" FontSize="{DynamicResource {x:Static vsshell:VsFonts.CaptionFontSizeKey}}" Height="36" />
+                </StackPanel>
+
+                <Separator />
+
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                    <Label Content="Gas Limit:"  Margin="4,0,0,2" />
+                    <RadioButton Content="Estimated Gas" Name="EstimatedGasFeeRadioButton" GroupName="SmartContractGasGroup" Checked="EstimatedGasFeeRadioButton_Checked" IsChecked="True" FontSize="{DynamicResource {x:Static vsshell:VsFonts.CaptionFontSizeKey}}" Foreground="{DynamicResource {x:Static vsevmui:VSTheme.ToolWindowTextKey}}" />
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Content="Custom"  Name="CustomGasFeeRadioButton" GroupName="SmartContractGasGroup" Checked="CustomGasFeeRadioButton_Checked" FontSize="{DynamicResource {x:Static vsshell:VsFonts.CaptionFontSizeKey}}" Foreground="{DynamicResource {x:Static vsevmui:VSTheme.ToolWindowTextKey}}"/>
+                        <ui:NumberBox SpinButtonPlacementMode="Inline"  Name="CustomGasFeeNumberBox" Value="3000000" IsEnabled="False" Width="150" Margin="0,2,10,4" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Label Content="Value:"  Margin="4,0,0,2" />
+                    <ui:NumberBox SpinButtonPlacementMode="Inline"  Name="ValueNumberBox" Value="0" Width="150" Margin="0,2,0,4" VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+
+            <Grid>
+
+                <StackPanel Name="DeployStatusStackPanel" Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center"  Visibility="Hidden">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:ProgressRing Name="DeployProgressRing" IsIndeterminate="True" IsEnabled="True" Width="12" Height="12" Margin="0,0,4,4" VerticalAlignment="Bottom"/>
+                        <ui:TextBlock Name = "DeploySolidityProjectStatusTextBlock" TextWrapping="WrapWithOverflow" VerticalAlignment="Bottom" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Name="DeploySuccessStackPanel" Grid.Row="0" Orientation="Horizontal" Visibility="Hidden">
+                    <ui:SymbolIcon Symbol="CheckmarkCircle24" VerticalAlignment="Bottom" Foreground="LightGreen" />
+                    <ui:TextBlock Name="DeploySuccessTextBlock" Margin="4,0,0,0" VerticalAlignment="Bottom" />
+                </StackPanel>
+
+                <StackPanel Name="DeployErrorsStackPanel" Grid.Row="0" Orientation="Horizontal" Visibility="Hidden">
+                    <ui:SymbolIcon Symbol="ErrorCircle24" VerticalAlignment="Bottom" Foreground="Red" />
+                    <ui:TextBlock Name = "DeployErrorsTextBlock" Grid.Row="0" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" 
+                        ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"/>
+                </StackPanel>
+            
+            </Grid>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <ui:Button Name="DeployButton" Appearance="Primary" Content="Deploy" Margin="0,10,0,0" Width="100" Height="36" Click="DeployButton_Click" />
+                <ui:Button Name="CancelButton" Appearance="Secondary" Content="Cancel" Margin="0,10,0,0" Width="100" Height="36" Click="CancelButton_Click" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

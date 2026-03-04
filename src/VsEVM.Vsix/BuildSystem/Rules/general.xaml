@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+<Rule
+	Name="ConfigurationGeneral"
+	DisplayName="General"
+	PageTemplate="generic"
+	Description="General"
+	xmlns="http://schemas.microsoft.com/build/2009/properties">
+    <Rule.Categories>
+        <Category Name="General" DisplayName="General" Description="General" />
+    </Rule.Categories>
+    <Rule.DataSource>
+        <DataSource Persistence="ProjectFile" Label="Configuration" />
+    </Rule.DataSource>
+
+  <StringProperty Name="BindingsNS" DisplayName=".NET Bindings Namespace">
+    <StringProperty.DataSource>
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="False" />
+    </StringProperty.DataSource>
+  </StringProperty>
+	
+	<EnumProperty Name="CompilerVersion" DisplayName="Solidity Compiler Version">
+		<EnumProperty.DataSource>
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="False" />
+		</EnumProperty.DataSource>
+		<EnumValue Name="0.8.20" />
+		<EnumValue Name="0.8.21" />
+		<EnumValue Name="0.8.22" />
+		<EnumValue Name="0.8.23" />
+		<EnumValue Name="0.8.24" />
+		<EnumValue Name="0.8.25" />
+		<EnumValue Name="0.8.26" />
+		<EnumValue Name="0.8.27" />
+	</EnumProperty>
+
+  <EnumProperty Name="EVMVersion" DisplayName="EVM Version">
+    <EnumProperty.DataSource>
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="False" />
+    </EnumProperty.DataSource>
+    <EnumValue Name="cancun" />
+    <EnumValue Name="shanghai" />
+    <EnumValue Name="paris" />
+    <EnumValue Name="london" />
+    <EnumValue Name="berlin" />
+    <EnumValue Name="istanbul" />
+    <EnumValue Name="constantinople" />
+  </EnumProperty>
+  
+
+  <StringProperty Name="DeployContract" DisplayName="Deploy Project Contract">
+    <StringProperty.DataSource>
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="False" />
+    </StringProperty.DataSource>
+  </StringProperty>
+
+  <StringProperty Name="DeployURL" DisplayName="Deploy JSON-RPC URL">
+    <StringProperty.DataSource>
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="False" />
+    </StringProperty.DataSource>
+  </StringProperty>
+
+  <StringProperty Name="DeployAccount" DisplayName="Deploy Account">
+    <StringProperty.DataSource>
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="False" />
+    </StringProperty.DataSource>
+  </StringProperty>
+
+  <StringProperty Name="DeployAccountPassword" DisplayName="Deploy Account Password">
+    <StringProperty.DataSource>
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="False" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  
+    <StringProperty Name="ProjectGuid" Visible="False">
+        <StringProperty.DataSource>
+            <DataSource Persistence="ProjectFile" Label="Globals" HasConfigurationCondition="False" />
+        </StringProperty.DataSource>
+    </StringProperty>
+
+    <BoolProperty Name="ShowAllFiles" Visible="False">
+        <BoolProperty.DataSource>
+            <DataSource Persistence="UserFile" HasConfigurationCondition="False" />
+        </BoolProperty.DataSource>
+    </BoolProperty>
+
+    <BoolProperty Name="AutoRefresh" Visible="False">
+        <BoolProperty.DataSource>
+            <DataSource Persistence="UserFile" HasConfigurationCondition="False" />
+        </BoolProperty.DataSource>
+    </BoolProperty>
+</Rule>

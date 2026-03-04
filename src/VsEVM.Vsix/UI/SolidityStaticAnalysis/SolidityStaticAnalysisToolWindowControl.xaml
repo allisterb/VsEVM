@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="VsEVM.UI.SolidityStaticAnalysisToolWindowControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"              
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:uimd="http://schemas.lepo.co/wpfui/2022/xaml/markdown"
+             xmlns:vsevmui="clr-namespace:VsEVM.UI;assembly="
+             xmlns:vm="clr-namespace:VsEVM.UI.ViewModel;assembly=" 
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0" 
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="100"
+             Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
+             Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
+             Name="SolidityAnalysisToolWindow">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="{x:Static vsevmui:VSTheme.ApplicationThemeGuess}" />
+                <ui:ControlsDictionary />
+                <uimd:ThemesDictionary Theme="{x:Static vsevmui:VSTheme.ApplicationThemeGuess}" />
+                <uimd:ControlsDictionary />
+                <ResourceDictionary Source="SolidityStaticAnalysisResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <!-- The view model that provides the data for the trees -->
+            <vm:SolidityStaticAnalysisViewModel x:Key="StaticAnalysis" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0">
+            <vsevmui:SolidityStaticAnalysisTree x:Name="SolidityStaticAnalysisTree"
+                Items="{Binding Source={StaticResource StaticAnalysis}, Path=Objects}"
+                TreeNodeStyle="{StaticResource TreeViewItemStyle}"
+                TreeStyle="{StaticResource TreeViewStyle}"
+                NodeSortDescriptions="{StaticResource AscendingNames}"
+                SelectNodesOnRightClick="True"
+                SelectedItemChanged="OnSelectedItemChanged"
+                IsLazyLoading="False"
+                Margin="0,0,0,10" />
+        </StackPanel>
+        <uimd:MarkdownViewer Name="StaticAnalysisMarkdownViewer" Grid.Row="1" HeaderBrush="{DynamicResource {x:Static vsevmui:VSTheme.ToolWindowTextKey}}" HyperlinkBrush="{DynamicResource {x:Static vsevmui:VSTheme.ToolWindowTextKey}}" HyperlinkInteractive="False"  />
+    </Grid>
+</UserControl>

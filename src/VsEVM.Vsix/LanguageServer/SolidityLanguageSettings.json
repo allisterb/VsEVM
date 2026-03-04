@@ -1,0 +1,8 @@
+﻿{
+  "solidity.trace.server": "Verbose",
+  "solidity.telemetry": false,
+  "solidity.maxNumberOfProblems": 1,
+  "solidity.enabledAsYouTypeCompilationErrorCheck": true,
+  "solidity.defaultCompiler": "localNodeModule",
+  "solidity.linter": "solhint"
+}

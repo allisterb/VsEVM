@@ -7,6 +7,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 public abstract class Runtime
 {
@@ -43,7 +45,7 @@ public abstract class Runtime
 
     public static string PathSeparator { get; } = Environment.OSVersion.Platform == PlatformID.Win32NT ? "\\" : "/";
 
-    public static string ToolName { get; set; } = "OnlyHumans";
+    public static string ToolName { get; set; } = "VsEVM";
         
     public static string LogName { get; set; } = "BASE";
 
@@ -51,7 +53,9 @@ public abstract class Runtime
 
     public static string AppDataDir => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-    public static string OnlyHumansDir => Path.Combine(AppDataDir, "OnlyHumans");
+    public static string VsEVMDir => Path.Combine(AppDataDir, "VsEVM");
+
+    public static string LocalAppDataDir => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
     public static Random Rng { get; } = new Random();
 
@@ -71,7 +75,7 @@ public abstract class Runtime
 
     public static bool IsUnitTestRun { get; set; }
 
-    public static string RunFile => Path.Combine(OnlyHumansDir, ToolName + ".run");
+    public static string RunFile => Path.Combine(VsEVMDir, ToolName + ".run");
 
     public virtual bool Initialized { get; protected set; }
 
@@ -192,7 +196,210 @@ public abstract class Runtime
         Error((Exception)e.ExceptionObject, "Unhandled runtime error occurred.");   
     }
 
-    
+
+
+    public static string? RunCmd(string cmdName, string arguments = "", string? workingDir = null, DataReceivedEventHandler? outputHandler = null, DataReceivedEventHandler? errorHandler = null,
+        bool checkExists = true, bool isNETFxTool = false, bool isNETCoreTool = false)
+    {
+        if (checkExists && !(File.Exists(cmdName) || (isNETCoreTool && File.Exists(cmdName.Replace(".exe", "")))))
+        {
+            Error("The executable {0} does not exist.", cmdName);
+            return null;
+        }
+        using (Process p = new Process())
+        {
+            var output = new StringBuilder();
+            var error = new StringBuilder();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardInput = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.CreateNoWindow = true;
+
+            if (isNETFxTool && System.Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                p.StartInfo.FileName = "mono";
+                p.StartInfo.Arguments = cmdName + " " + arguments;
+            }
+            else if (isNETCoreTool && System.Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                p.StartInfo.FileName = File.Exists(cmdName) ? cmdName : cmdName.Replace(".exe", "");
+                p.StartInfo.Arguments = arguments;
+
+            }
+            else
+            {
+                p.StartInfo.FileName = cmdName;
+                p.StartInfo.Arguments = arguments;
+            }
+
+            p.OutputDataReceived += (sender, e) =>
+            {
+                if (e.Data is not null)
+                {
+                    output.AppendLine(e.Data);
+                    Debug(e.Data);
+                    outputHandler?.Invoke(sender, e);
+                }
+            };
+            p.ErrorDataReceived += (sender, e) =>
+            {
+                if (e.Data is not null)
+                {
+                    error.AppendLine(e.Data);
+                    Error(e.Data);
+                    errorHandler?.Invoke(sender, e);
+                }
+            };
+            if (workingDir is not null)
+            {
+                p.StartInfo.WorkingDirectory = workingDir;
+            }
+            Debug("Executing cmd {0} in working directory {1}.", cmdName + " " + arguments, p.StartInfo.WorkingDirectory);
+            try
+            {
+                p.Start();
+                p.BeginOutputReadLine();
+                p.BeginErrorReadLine();
+                p.WaitForExit();
+                return error.ToString().IsNotEmpty() ? null : output.ToString();
+            }
+
+            catch (Exception ex)
+            {
+                Error(ex, "Error executing command {0} {1}", cmdName, arguments);
+                return null;
+            }
+        }
+    }
+
+    public static Dictionary<string, object> RunCmd(string filename, string arguments, string workingdirectory)
+    {
+        ProcessStartInfo info = new ProcessStartInfo();
+        info.FileName = filename;
+        info.Arguments = arguments;
+        info.WorkingDirectory = workingdirectory;
+        info.RedirectStandardOutput = true;
+        info.RedirectStandardError = true;
+        info.UseShellExecute = false;
+        info.CreateNoWindow = true;
+        var output = new Dictionary<string, object>();
+        using (var process = new Process())
+        {
+            process.StartInfo = info;
+            try
+            {
+                if (!process.Start())
+                {
+                    output["error"] = ("Could not start {file} {args} in {dir}.", info.FileName, info.Arguments, info.WorkingDirectory);
+                    return output;
+                }
+                var stdout = process.StandardOutput.ReadToEnd();
+                var stderr = process.StandardError.ReadToEnd();
+                if (stdout != null && stdout.Length > 0)
+                {
+                    output["stdout"] = stdout;
+                }
+                if (stderr != null && stderr.Length > 0)
+                {
+                    output["stderr"] = stderr;
+                }
+                return output;
+            }
+            catch (Exception ex)
+            {
+                output["exception"] = ex;
+                return output;
+            }
+        }
+    }
+
+    public static async Task<Dictionary<string, object>> RunCmdAsync(string filename, string arguments, string workingdirectory)
+    {
+        ProcessStartInfo info = new ProcessStartInfo();
+        info.FileName = filename;
+        info.Arguments = arguments;
+        info.WorkingDirectory = workingdirectory;
+        info.RedirectStandardOutput = true;
+        info.RedirectStandardError = true;
+        info.UseShellExecute = false;
+        info.CreateNoWindow = true;
+        var output = new Dictionary<string, object>();
+        using (var process = new Process())
+        {
+            process.StartInfo = info;
+            try
+            {
+                if (!process.Start())
+                {
+                    output["error"] = ("Could not start {file} {args} in {dir}.", info.FileName, info.Arguments, info.WorkingDirectory);
+                    return output;
+                }
+                var stdout = await process.StandardOutput.ReadToEndAsync();
+                var stderr = await process.StandardError.ReadToEndAsync();
+                if (stdout != null && stdout.Length > 0)
+                {
+                    output["stdout"] = stdout;
+                }
+                if (stderr != null && stderr.Length > 0)
+                {
+                    output["stderr"] = stderr;
+                }
+                return output;
+            }
+            catch (Exception ex)
+            {
+                output["exception"] = ex;
+                return output;
+            }
+        }
+    }
+
+    public static bool CheckRunCmdError(Dictionary<string, object> output) => output.ContainsKey("error") || output.ContainsKey("exception");
+
+    public static string GetRunCmdError(Dictionary<string, object> output) => (output.ContainsKey("error") ? (string)output["error"] : "")
+        + (output.ContainsKey("exception") ? (string)output["exception"] : "");
+
+    public static bool CheckRunCmdOutput(Dictionary<string, object> output, string checktext)
+    {
+        if (output.ContainsKey("error") || output.ContainsKey("exception"))
+        {
+            if (output.ContainsKey("error"))
+            {
+                Error((string)output["error"]);
+            }
+            if (output.ContainsKey("exception"))
+            {
+                Error((Exception)output["exception"], "Exception thrown during process execution.");
+            }
+            return false;
+        }
+        else
+        {
+            if (output.ContainsKey("stderr"))
+            {
+                var stderr = (string)output["stderr"];
+                Info(stderr);
+            }
+            if (output.ContainsKey("stdout"))
+            {
+                var stdout = (string)output["stdout"];
+                Info(stdout);
+                if (stdout.Contains(checktext))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
 
     public static void CopyDirectory(string sourceDir, string destinationDir, bool recursive = false)
     {
@@ -229,6 +436,93 @@ public abstract class Runtime
         op.Complete();
     }
 
+    public static async Task CopyDirectoryAsync(string sourceDir, string destinationDir, bool recursive = false)
+    {
+        using var op = Begin("Copying {0} to {1}", sourceDir, destinationDir);
+        // Get information about the source directory
+        var dir = new DirectoryInfo(sourceDir);
+
+        // Check if the source directory exists
+        if (!dir.Exists)
+            throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
+
+        // Cache directories before we start copying
+        DirectoryInfo[] dirs = dir.GetDirectories();
+
+        // Create the destination directory
+        if (!Directory.Exists(destinationDir))
+        {
+            Directory.CreateDirectory(destinationDir);
+        }
+
+        // Get the files in the source directory and copy to the destination directory
+        foreach (var file in dir.GetFiles())
+        {
+            var of = Path.Combine(destinationDir, file.Name);
+            using (FileStream sourceStream = file.Open(FileMode.Open))
+            {
+                using (FileStream destinationStream = File.Create(of))
+                {
+                    await sourceStream.CopyToAsync(destinationStream);
+                }
+            }
+        }
+
+        // If recursive and copying subdirectories, recursively call this method
+        if (recursive)
+        {
+            foreach (DirectoryInfo subDir in dirs)
+            {
+                string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+                await CopyDirectoryAsync(subDir.FullName, newDestinationDir, true);
+            }
+        }
+        op.Complete();
+    }
+
+    public static async Task CopyFileAsync(string src, string dst)
+    {
+        using (var srcStream = new FileStream(src, FileMode.Open, FileAccess.Read, FileShare.Read, 0x1000, useAsync: true))
+        using (var dstStream = new FileStream(dst, FileMode.Create, FileAccess.Write, FileShare.Write, 0x1000, useAsync: true))
+        {
+            await srcStream.CopyToAsync(dstStream);
+        }
+    }
+
+    public static async Task<bool> DownloadFileAsync(string name, Uri downloadUrl, string downloadPath)
+    {
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
+        using (var op = Begin("Downloading {0} from {1} to {2}", name, downloadUrl, downloadPath))
+        {
+            using (var client = new WebClient())
+            {
+                try
+                {
+                    var b = await client.DownloadDataTaskAsync(downloadUrl);
+                    if (b != null)
+                    {
+                        File.WriteAllBytes(downloadPath, b);
+                        op.Complete();
+                        return true;
+                    }
+                    else
+                    {
+                        op.Abandon();
+                        Error("Downloading {file} to {path} from {url} did not return any data.", name, downloadPath, downloadUrl);
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    op.Abandon();
+                    Error(ex, "Exception thrown downloading {file} to {path} from {url}.", name, downloadPath, downloadUrl);
+                    return false;
+                }
+            }
+        }
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
+    }
+
     public static string ViewFilePath(string path, string? relativeTo = null)
     {
         if (!DebugEnabled)
@@ -243,12 +537,40 @@ public abstract class Runtime
             }
             else
             {
-                return (IO.GetRelativePath(relativeTo, path));
+                return (IOExtensions.GetRelativePath(relativeTo, path));
             }
         }
         else return path;
     }
 
+    /// <summary>
+    /// Returns a relative path string from a full path based on a base path
+    /// provided.
+    /// </summary>
+    /// <param name="fullPath">The path to convert. Can be either a file or a directory</param>
+    /// <param name="basePath">The base path on which relative processing is based. Should be a directory.</param>
+    /// <returns>
+    /// String of the relative path.
+    /// 
+    /// Examples of returned values:
+    ///  test.txt, ..\test.txt, ..\..\..\test.txt, ., .., subdir\test.txt
+    /// </returns>
+    public static string GetWindowsRelativePath(string fullPath, string basePath)
+    {
+        // Require trailing backslash for path
+        if (!basePath.EndsWith("\\"))
+            basePath += "\\";
+
+        Uri baseUri = new Uri(basePath);
+        Uri fullUri = new Uri(fullPath);
+
+        Uri relativeUri = baseUri.MakeRelativeUri(fullUri);
+
+        // Uri's use forward slashes so convert back to backward slashes
+        return relativeUri.ToString().Replace("/", "\\");
+
+    }
+    
     public static bool DownloadFile(string name, Uri downloadUrl, string downloadPath)
     {
 #pragma warning disable SYSLIB0014 // Type or member is obsolete

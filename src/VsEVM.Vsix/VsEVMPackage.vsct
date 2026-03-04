@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!--  This is the file that defines the actual layout and type of the commands.
+        It is divided in different sections (e.g. command definition, command
+        placement, ...), with each defining a specific set of properties.
+        See the comment before each section for more details about how to
+        use it. -->
+
+  <!--  The VSCT compiler (the tool that translates this file into the binary
+        format that VisualStudio will consume) has the ability to run a preprocessor
+        on the vsct file; this preprocessor is (usually) the C++ preprocessor, so
+        it is possible to define includes and macros with the same syntax used
+        in C++ files. Using this ability of the compiler here, we include some files
+        defining some of the constants that we will use inside the file. -->
+
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h" />
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h" />
+
+  <Include href="KnownImageIds.vsct" />
+  <Include href="VSGlobals.vsct" />
+  
+	<!--The Commands section is where commands, menus, and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
+  <Commands package="guidStratisEVMPackage">
+    <!-- Inside this section we have different sub-sections: one for the menus, another
+    for the menu groups, one for the buttons (the actual commands), one for the combos
+    and the last one for the bitmaps used. Each element is identified by a command id that
+    is a unique pair of guid and numeric identifier; the guid part of the identifier is usually
+    called "command set" and is used to group different command inside a logically related
+    group; your package should define its own command set in order to avoid collisions
+    with command ids defined by other packages. -->
+
+	<Menus>
+        <Menu guid="guidBlockchainExplorer" id="TWindowToolbar" type="ToolWindowToolbar">
+		    <CommandFlag>DefaultDocked</CommandFlag>
+			<Strings>
+			    <ButtonText>Tool Window Toolbar</ButtonText>
+			</Strings>
+		</Menu>
+	</Menus>
+
+    <!-- In this section you can define new menu groups. A menu group is a container for
+         other menus or buttons (commands); from a visual point of view you can see the
+         group as the part of a menu contained between two lines. The parent of a group
+         must be a menu. -->
+    <Groups>
+      <Group guid="guidStratisEVMPackageCmdSet" id="MyMenuGroup" priority="0x0200">
+        <Parent guid="guidWorkspaceExplorerToolWindowCmdSet" id="idmWSE_ContextMenu" />
+      </Group>
+
+      <Groups>
+        <Group guid="guidStratisEVMPackageCmdSet1" id="MyGroupForCommands" />
+      </Groups>
+      
+      <Groups>
+        <Group guid="guidStratisEVMPackageCmdSet3" id="MyGroupForCommands2" />
+      </Groups>
+
+
+		<Group guid="guidBlockchainExplorer" id="TWindowToolbarGroup" priority="0x0000">
+			<Parent guid="guidBlockchainExplorer" id="TWindowToolbar" />
+		</Group>
+    </Groups>
+
+    <!--Buttons section. -->
+    <!--This section defines the elements the user can interact with, like a menu command or a button
+        or combo box in a toolbar. -->
+    <Buttons>
+      <!--To define a menu group you have to specify its ID, the parent menu and its display priority.
+          The command is visible and enabled by default. If you need to change the visibility, status, etc, you can use
+          the CommandFlag node.
+          You can add more than one CommandFlag node e.g.:
+              <CommandFlag>DefaultInvisible</CommandFlag>
+              <CommandFlag>DynamicVisibility</CommandFlag>
+          If you do not want an image next to your command, remove the Icon node /> -->
+      <Button guid="guidStratisEVMPackageCmdSet" id="CmdId1" priority="0x0100" type="Button">
+        <Parent guid="guidStratisEVMPackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidSolidityIcon" id="pngSolidity" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Compile Solidity File</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidStratisEVMPackageCmdSet" id="CmdId4" priority="0x0100" type="Button">
+        <Parent guid="guidStratisEVMPackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidSolidityStaticAnalysisIcon" id="pngSolidityStaticAnalysis" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Analyze Solidity File</ButtonText>
+        </Strings>
+      </Button>
+      
+      
+      <Button guid="guidStratisEVMPackageCmdSet1" id="cmdidSolidityProjectMenuCommands" priority="0x0100" type="Button">
+        <Parent guid="guidStratisEVMPackageCmdSet1" id="MyGroupForCommands" />
+        <Icon guid="guidSolidityIcon" id="pngSolidity" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+		    <CommandFlag>AllowParams</CommandFlag>
+        <Strings>
+          <ButtonText>Compile Solidity File</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidStratisEVMPackageCmdSet3" id="SolidityProjectMenuCmdId3" priority="0x0101" type="Button">
+        <Parent guid="guidStratisEVMPackageCmdSet3" id="MyGroupForCommands2" />
+        <Icon guid="guidDeploySolidityIcon" id="pngDeploySolidity" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>AllowParams</CommandFlag>
+        <Strings>
+          <ButtonText>Show Deploy tool window...</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidStratisEVMPackageCmdSet1" id="SolidityProjectMenuCmdId2" priority="0x0100" type="Button">
+        <Parent guid="guidStratisEVMPackageCmdSet1" id="MyGroupForCommands" />
+        <Icon guid="guidNPMIcon" id="pngNPM" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Install NPM packages</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidStratisEVMPackageCmdSet1" id="SolidityProjectMenuCmdId4" priority="0x0100" type="Button">
+        <Parent guid="guidStratisEVMPackageCmdSet1" id="MyGroupForCommands" />
+        <Icon guid="guidSolidityStaticAnalysisIcon" id="pngSolidityStaticAnalysis" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Analyze Solidity File</ButtonText>
+        </Strings>
+      </Button>
+
+	  <!-- Blockchain Explorer toolbar buttons -->
+    <Button guid="guidBlockchainExplorer" id="MyCommand" priority="0x0100" type="Button">
+		  <Parent guid="VSMainMenu" id="View.DevWindowsGroup.OtherWindows.Group1" />
+		  <Icon guid="ImageCatalogGuid" id="StatusHelpOutline" />
+		  <CommandFlag>IconIsMoniker</CommandFlag>
+		  <Strings>
+			  <ButtonText>Help Explorer</ButtonText>
+			  <LocCanonicalName>.View.HelpExplorer</LocCanonicalName>
+		  </Strings>
+	  </Button>
+
+		<Button guid="guidBlockchainExplorer" id="MultipleProjectTypeDisplay" priority="0x0001" type="Button">
+			<Parent guid="guidBlockchainExplorer" id="TWindowToolbarGroup" />
+			<Icon guid="ImageCatalogGuid" id="DynamicDiscoveryDocument" />
+			<CommandFlag>IconIsMoniker</CommandFlag>
+			<!--<CommandFlag>IconAndText</CommandFlag>-->
+			<Strings>
+				<ButtonText>Display Multiple Project Type Links</ButtonText>
+			</Strings>
+		</Button>
+
+		<Button guid="guidBlockchainExplorer" id="MultipleFileTypeDisplay" priority="0x0001" type="Button">
+			<Parent guid="guidBlockchainExplorer" id="TWindowToolbarGroup" />
+			<Icon guid="ImageCatalogGuid" id="ProjectFilterFile" />
+			<CommandFlag>IconIsMoniker</CommandFlag>
+			<!--<CommandFlag>IconAndText</CommandFlag>-->
+			<Strings>
+				<ButtonText>Display Multiple File Type Links</ButtonText>
+			</Strings>
+		</Button>
+
+		<Button guid="guidBlockchainExplorer" id="CreateCapabilitiyFile" priority="0x0001" type="Button">
+			<Parent guid="guidBlockchainExplorer" id="TWindowToolbarGroup" />
+			<Icon guid="ImageCatalogGuid" id="CacheGroup" />
+			<CommandFlag>IconIsMoniker</CommandFlag>
+			<!--<CommandFlag>IconAndText</CommandFlag>-->
+			<Strings>
+				<ButtonText>Save Project Capabilities to file</ButtonText>
+			</Strings>
+		</Button>
+      
+      <Button guid="guidStratisEVMPackageCmdSet" id="cmdidBlockchainExplorerToolWindowCommand" priority="0x0100" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
+        <Icon guid="guidImages2" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Blockchain Explorer</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidStratisEVMPackageCmdSet" id="cmdidStratisEVMBlockchainDashboardToolWindowCommand" priority="0x0100" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
+        <Icon guid="guidImages3" id="bmpPic1" />
+        <Strings>
+          <ButtonText>StratisEVM Blockchain Dashboard</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidStratisEVMPackageCmdSet" id="cmdidDeploySolidityProjectToolWindowCommand" priority="0x0100" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
+        <Icon guid="guidImages4" id="bmpPic1" />
+        <Strings>
+          <ButtonText>DeploySolidityProjectToolWindow</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidStratisEVMPackageCmdSet" id="cmdidRunSmartContractToolWindowCommand" priority="0x0100" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
+        <Icon guid="guidImages5" id="bmpPic1" />
+        <Strings>
+          <ButtonText>RunSmartContractToolWindow</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidStratisEVMPackageCmdSet" id="cmdidSolidityAnalysisToolWindowCommand" priority="0x0100" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
+        <Icon guid="guidImages6" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Solidity Static Analysis ToolWindow</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+	  
+	
+
+    <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
+    <Bitmaps>
+      <!--  The bitmap id is defined in a way that is a little bit different from the others:
+            the declaration starts with a guid for the bitmap strip, then there is the resource id of the
+            bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
+            inside a button definition. An important aspect of this declaration is that the element id
+            must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
+      <Bitmap guid="guidImages" href="Resources\Commands.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidSolidityIcon" href="Resources\solidity_16x16.png" usedList="pngSolidity" />
+      <Bitmap guid="guidNPMIcon" href="Resources\NodeJSPackage_16x.png" usedList="pngNPM" />
+      <Bitmap guid="guidDeploySolidityIcon" href="Resources\DeploySolidity_16x16.png" usedList="pngDeploySolidity" />
+      <Bitmap guid="guidSolidityStaticAnalysisIcon" href="Resources\SolidityStaticAnalysis16x16.png" usedList="pngSolidityStaticAnalysis" />
+      <Bitmap guid="guidImages1" href="Resources\SolidityProjectMenuCommands.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages2" href="Resources\BlockchainExplorerToolWindowCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages3" href="Resources\VsEVMBlockchainDashboardToolWindowCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages4" href="Resources\DeploySolidityProjectToolWindowCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages5" href="Resources\RunSmartContractToolWindowCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages6" href="Resources\SolidityAnalysisToolWindowCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+    </Bitmaps>
+  </Commands>
+
+  <CommandPlacements>
+    <CommandPlacement guid="guidStratisEVMPackageCmdSet1" id="MyGroupForCommands" priority="0x0100">
+      <!-- The parent of the group will be the file context menu -->
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+    </CommandPlacement>
+  </CommandPlacements>
+
+  <CommandPlacements>
+    <CommandPlacement guid="guidStratisEVMPackageCmdSet3" id="MyGroupForCommands2" priority="0x0100">
+      <!-- The parent of the group will be the file context menu -->
+              <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+    </CommandPlacement>
+  </CommandPlacements>
+
+  <VisibilityConstraints>
+    <VisibilityItem guid="guidStratisEVMPackageCmdSet1" id="cmdidSolidityProjectMenuCommands" context="SolidityFileUIContextRule" />
+    <VisibilityItem guid="guidStratisEVMPackageCmdSet1" id="SolidityProjectMenuCmdId2" context="NPMFileUIContextRule" />
+    <VisibilityItem guid="guidStratisEVMPackageCmdSet1" id="SolidityProjectMenuCmdId4" context="SolidityFileUIContextRule" />
+    <VisibilityItem guid="guidStratisEVMPackageCmdSet3" id="SolidityProjectMenuCmdId3" context="SolidityProjectFileUIContextRule" />
+  </VisibilityConstraints>
+  
+  <Symbols>
+    <!-- This is the package guid. -->
+    <GuidSymbol name="guidStratisEVMPackage" value="{711b90a1-97e6-4b9a-91c4-3d62ccd32d4e}" />
+    <GuidSymbol name="SolidityFileUIContextRule" value="{82268519-FB9D-4B7E-8B01-2A311F4181E2}" />
+    <GuidSymbol name="SolidityProjectFileUIContextRule" value="{9d4c64d4-52eb-4ebe-aa01-1d975eb3a9d7}" />
+    <GuidSymbol name="NPMFileUIContextRule" value="{9A7CA75A-FA6E-45B2-B6E9-4BFF0AB7BB88}" />
+
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidStratisEVMPackageCmdSet" value="{5e1dc4ca-7f1b-4ff0-a794-7e162ab8f421}">
+      <IDSymbol name="MyMenuGroup" value="0x1020" />
+      <IDSymbol name="CmdId1" value="0x0101" />
+      <IDSymbol name="CmdId2" value="0x0102" />
+      <IDSymbol name="CmdId4" value="0x0104" />
+      <IDSymbol value="256" name="cmdidBlockchainExplorerToolWindowCommand" />
+      <IDSymbol value="4129" name="cmdidStratisEVMBlockchainDashboardToolWindowCommand" />
+      <IDSymbol value="4130" name="cmdidDeploySolidityProjectToolWindowCommand" />
+      <IDSymbol value="4131" name="cmdidRunSmartContractToolWindowCommand" />
+      <IDSymbol value="4132" name="cmdidSolidityAnalysisToolWindowCommand" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidImages" value="{566c40d3-8ac5-4660-9ccc-44da7e349169}">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidSolidityIcon" value="{8c6b2f07-1d7b-4571-ae48-7316f785f751}">
+      <IDSymbol name="pngSolidity" value="1" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidDeploySolidityIcon" value="{ec68fb4e-61c8-4243-8092-33520e331e9b}">
+      <IDSymbol name="pngDeploySolidity" value="1" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidNPMIcon" value="{8DBD10FD-7591-4323-AD99-59EABB9E334D}">
+      <IDSymbol name="pngNPM" value="1" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidSolidityStaticAnalysisIcon" value="{fea96501-06ce-42c4-85fb-222a95b6fc72}">
+      <IDSymbol name="pngSolidityStaticAnalysis" value="1" />
+    </GuidSymbol>
+
+    <!-- Solution Explorer folder mode GUIDs and IDs. -->
+    <GuidSymbol name="guidWorkspaceExplorerToolWindowCmdSet" value="{cfb400f1-5c60-4f3c-856e-180d28def0b7}">
+      <IDSymbol name="idmWSE_ContextMenu" value="0x0002" />
+    </GuidSymbol>
+  
+    <GuidSymbol name="guidStratisEVMPackageCmdSet1" value="{1370374f-6ad4-4975-80fb-6d3487cd4ba9}">
+      <IDSymbol value="4128" name="MyGroupForCommands" />
+      <IDSymbol value="0x0100" name="cmdidSolidityProjectMenuCommands" />
+      <IDSymbol value="0x0101" name="SolidityProjectMenuCmdId2" />
+      <IDSymbol value="0x0104" name="SolidityProjectMenuCmdId4" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidStratisEVMPackageCmdSet3" value="{edaae768-9fc5-4b43-9421-cc1313528cda}">
+      <IDSymbol value="8256" name="MyGroupForCommands2" />
+      <IDSymbol value="0x0103" name="SolidityProjectMenuCmdId3" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{2cf4a158-77c9-4d4f-93b4-beb73cfeda88}" name="guidImages1">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+
+	<GuidSymbol name="guidBlockchainExplorer" value="{69f0baca-6ff2-4fc3-b276-603ea376fee4}">
+		  <IDSymbol name="MyCommand" value="0x0100" />
+		  <IDSymbol name="TWindowToolbar" value="0x1000" />
+		  <IDSymbol name="TWindowToolbarGroup" value="0x1050" />
+		  <IDSymbol name="MultipleProjectTypeDisplay" value="0x0111" />
+		  <IDSymbol name="MultipleFileTypeDisplay" value="0x0112" />
+		  <IDSymbol name="CreateCapabilitiyFile" value="0x0113" />
+	</GuidSymbol>
+  
+    <GuidSymbol value="{d4953174-0817-4c69-92b5-b90aa84c3022}" name="guidImages2">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{abaf3648-0f43-4ab0-8f5b-c7e56979aa02}" name="guidImages3">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{d29cc612-ec9b-48c2-88a5-8cdfccfaa8a5}" name="guidImages4">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{4a633e61-420d-41e3-bae2-62fbc81ce4f1}" name="guidImages5">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{e94e1c8d-511c-4915-ad7a-6f9d56ede8c7}" name="guidImages6">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>

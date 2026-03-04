@@ -1,0 +1,440 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{99ED2062-8DD2-4969-972C-C9DC81EBF869}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VsEVM</RootNamespace>
+    <AssemblyName>VsEVM</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <GeneratePkgDefFile>true</GeneratePkgDefFile>
+    <UseCodebase>true</UseCodebase>
+    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <!--Avoid including unneeded references from PackageReference into vsix. If this behavior is desired, an alternative option is to use SuppressFromVsix items to specify which items to be excluded.-->
+    <IncludePackageReferencesInVSIXContainer>false</IncludePackageReferencesInVSIXContainer>
+    <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
+    <StartAction>Program</StartAction>
+    <StartProgram Condition="'$(DevEnvDir)' != ''">$(DevEnvDir)devenv.exe</StartProgram>
+    <StartArguments>/rootsuffix Exp</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;IS_VSIX</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;IS_VSIX</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="SolidityProject\SoliditySlitherAnalysis.cs" />
+    <Compile Include="SolidityProject\SolidityBuildContextProviderFactory.cs" />
+    <Compile Include="SolidityProject\SolidityCompilerIO.cs" />
+    <Compile Include="UI\BlockchainExplorer\Converters.cs" />
+    <Compile Include="UI\DeploySolidityProject\DeploySolidityProjectToolWindow.cs" />
+    <Compile Include="UI\DeploySolidityProject\DeploySolidityProjectToolWindowCommand.cs" />
+    <Compile Include="UI\DeploySolidityProject\DeploySolidityProjectToolWindowControl.xaml.cs">
+      <DependentUpon>DeploySolidityProjectToolWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\RunSmartContract\RunSmartContractToolWindow.cs" />
+    <Compile Include="UI\RunSmartContract\RunSmartContractToolWindowCommand.cs" />
+    <Compile Include="UI\RunSmartContract\RunSmartContractToolWindowControl.xaml.cs">
+      <DependentUpon>RunSmartContractToolWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SolidityStaticAnalysis\SolidityStaticAnalysisTree.cs" />
+    <Compile Include="UI\SolidityStaticAnalysis\SolidityStaticAnalysisViewModel.cs" />
+    <Compile Include="UI\SolidityStaticAnalysis\SolidityStaticAnalysisToolWindow.cs" />
+    <Compile Include="UI\SolidityStaticAnalysis\SolidityStaticAnalysisToolWindowCommand.cs" />
+    <Compile Include="UI\SolidityStaticAnalysis\SolidityStaticAnalysisToolWindowControl.xaml.cs">
+      <DependentUpon>SolidityStaticAnalysisToolWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EthereumBlockchainDashboard\EthereumBlockchainDashboardToolWindow.cs" />
+    <Compile Include="UI\EthereumBlockchainDashboard\EthereumBlockchainDashboardToolWindowCommand.cs" />
+    <Compile Include="UI\EthereumBlockchainDashboard\EthereumBlockchainDashboardToolWindowControl.xaml.cs">
+      <DependentUpon>EthereumBlockchainDashboardToolWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ToolWindowDialog.xaml.cs">
+      <DependentUpon>ToolWindowDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\BlockchainExplorer\BlockchainExplorerToolWindow.cs" />
+    <Compile Include="UI\BlockchainExplorer\BlockchainExplorerToolWindowCommand.cs" />
+    <Compile Include="UI\BlockchainExplorer\BlockchainExplorerToolWindowControl.xaml.cs">
+      <DependentUpon>BlockchainExplorerToolWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SolidityProject\SolidityProjectDeployProvider.cs" />
+    <Compile Include="SolidityProject\SolidityProjectMenuCommands.cs" />
+    <Compile Include="SolidityProject\SolidityProjectMonikers.cs" />
+    <Compile Include="SolidityProject\SolidityProjectTreePropertiesProvider.cs" />
+    <Compile Include="UI\BlockchainExplorer\BlockchainExplorerTree.cs" />
+    <Compile Include="UI\BlockchainExplorer\BlockchainViewModel.cs" />
+    <Compile Include="UI\SolidityProjectWizard.cs" />
+    <Compile Include="SolidityProject\SolidityConfiguredProject.cs" />
+    <Compile Include="SolidityProject\SolidityUnconfiguredProject.cs" />
+    <Compile Include="SolidityProject\SolidityProjectProperties.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SolidityProject\SolidityCompiler.cs" />
+    <Compile Include="LanguageServer\SolidityContentTypeDefinition.cs" />
+    <Compile Include="SolidityProject\SolidityFileContextActionsProviderFactory.cs" />
+    <Compile Include="SolidityProject\SolidityFileContextProviderFactory.cs" />
+    <Compile Include="LanguageServer\SolidityLanguageClient.cs" />
+    <Compile Include="VsEVMPackage.cs" />
+    <Compile Include="VsEVMPackageIds.cs" />
+    <Compile Include="UI\SolidityProjectWizardDialogWindow.xaml.cs">
+      <DependentUpon>SolidityProjectWizardDialogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EthereumBlockchainDashboard\EthereumBlockchainDashboardTransactionsUserControl.xaml.cs">
+      <DependentUpon>EthereumBlockchainDashboardTransactionsUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EthereumBlockchainDashboard\EthereumBlockchainHomeUserControl.xaml.cs">
+      <DependentUpon>EthereumBlockchainHomeUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\TreeView\ItemMonitor.cs" />
+    <Compile Include="UI\TreeView\RoutedTreeItemEventArgs.cs" />
+    <Compile Include="UI\TreeView\TreeLayout.cs" />
+    <Compile Include="UI\TreeView\TreeUtil.cs" />
+    <Compile Include="UI\TreeView\TreeViewBase.cs" />
+    <Compile Include="UI\TreeView\TreeViewBase.Declarations.cs" />
+    <Compile Include="UI\VSTheme.cs" />
+    <Compile Include="VSUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\FolderSelected.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Images\VsEVMLogo200x200.png" />
+    <Content Include="Images\VsEVMLogo64x64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\DeploySolidityProjectToolWindowCommand.png" />
+    <Content Include="Resources\RunSmartContractToolWindowCommand.png" />
+    <Content Include="Resources\SolidityAnalysisToolWindowCommand.png" />
+    <Content Include="VsEVMLogo200x200.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="UI\TreeView\Classes.cd" />
+    <Resource Include="Images\SolidityProjectProjectIcon.png" />
+    <Resource Include="Images\SoliditySourceFileIcon.png" />
+    <Content Include="BuildSystem\version.txt">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Images\StratisIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="README.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="RELEASENOTES.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\BlockchainExplorerToolWindowCommand.png" />
+    <Content Include="Resources\Commands.png" />
+    <Content Include="Resources\DeploySolidity_16x16.png" />
+    <Content Include="Resources\NodeJSPackage_16x.png" />
+    <Content Include="Resources\SolidityProjectMenuCommands.png" />
+    <Content Include="Resources\SolidityStaticAnalysis.png" />
+    <Content Include="Resources\SolidityStaticAnalysis16x16.png" />
+    <Content Include="Resources\SolidityStaticAnalysis64x64.png" />
+    <Content Include="Resources\solidity_16x16.png" />
+    <Content Include="LanguageServer\SolidityLanguageSettings.json">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\VsEVMBlockchainDashboardToolWindowCommand.png" />
+    <Content Include="package.json">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="LanguageServer\Grammars\solidity.json">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Solidity.Build.xsd">
+      <SubType>Designer</SubType>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="README.md" />
+    <Content Include="SolidityProject.imagemanifest">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="solidity-0.0.185.tgz">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Community.VisualStudio.VSCT">
+      <Version>16.0.29.6</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.LanguageServer.Client">
+      <Version>17.14.60</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.LanguageServer.Protocol">
+      <Version>17.2.8</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem.SDK">
+      <Version>17.9.380</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.14.40265" ExcludeAssets="runtime">
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface">
+      <Version>17.10.40170</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Workspace">
+      <Version>17.12.19</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Workspace.Extensions.VS">
+      <Version>17.12.19</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.14.2101">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Nethereum.Web3">
+      <Version>5.8.0</Version>
+    </PackageReference>
+    <PackageReference Include="WPF-UI">
+      <Version>4.0.3</Version>
+    </PackageReference>
+    <Reference Include="System.Design" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LanguageServer\SolidityLanguageSettings.pkgdef">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <VSCTCompile Include="VsEVMPackage.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ext\Wpf.Ui.Markdown\Wpf.Ui.Markdown.csproj">
+      <Project>{d1fb6478-62c3-c1af-67bf-11e03e44efb4}</Project>
+      <Name>Wpf.Ui.Markdown</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VsEVM.Base\VsEVM.Base.csproj">
+      <Project>{19f7f384-2f9a-4c0f-890b-33e45c4289bc}</Project>
+      <Name>VsEVM.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VsEVM.BuildTasks\VsEVM.BuildTasks.csproj">
+      <Project>{e4254b56-af7c-7897-556c-4d200e30e578}</Project>
+      <Name>VsEVM.BuildTasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VsEVM.Ethereum\VsEVM.Ethereum.csproj">
+      <Project>{130c8233-8ceb-4ae6-bd17-c852dd4332c7}</Project>
+      <Name>VsEVM.Ethereum</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VsEVM.SolidityFileItemTemplate\VsEVM.SolidityFileItemTemplate.csproj">
+      <Project>{72198956-89B5-48F4-B209-A963504B5279}</Project>
+      <Name>VsEVM.SolidityFileItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\VsEVM.SolidityProjectTemplate\VsEVM.SolidityProjectTemplate.csproj">
+      <Project>{90BA4A89-26AA-4E2D-86EF-F5CC2420EB61}</Project>
+      <Name>VsEVM.SolidityProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="VsEVMPackage.resx">
+      <MergeWithCTO>true</MergeWithCTO>
+      <ManifestResourceName>VsEVMPackage</ManifestResourceName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\StratisIcon.xaml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Page Include="UI\DeploySolidityProject\DeploySolidityProjectToolWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\RunSmartContract\RunSmartContractToolWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SolidityStaticAnalysis\SolidityStaticAnalysisResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\SolidityStaticAnalysis\SolidityStaticAnalysisToolWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\EthereumBlockchainDashboard\EthereumBlockchainDashboardTransactionsUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\EthereumBlockchainDashboard\EthereumBlockchainHomeUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Resource Include="Images\SolidityProjectProjectIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Resource>
+    <Resource Include="Images\SoliditySourceFileIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Page Include="UI\EthereumBlockchainDashboard\EthereumBlockchainDashboardToolWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ToolWindowDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\BlockchainExplorer\BlockchainExplorerToolWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DialogWindowResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\BlockchainExplorer\BlockchainExplorerTreeResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\SolidityProjectWizardDialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <!-- 
+  These are the parts of the custom project system which will be deployed as part of the 
+  final implementation, and provide the basic processing for handling rules in CPS.
+  -->
+  <ItemGroup>
+    <Content Include="BuildSystem\Solidity.props">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Solidity.targets">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+  </ItemGroup>
+  <!--
+  The XAML files provide buth compile-time implementations for CPS rules as well as
+  runtime information for property pages.  They will also be deployed as part of the
+  final package.
+  -->
+  <ItemGroup>
+    <Content Include="BuildSystem\Rules\ProjectItemsSchema.xaml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Rules\general.xaml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Rules\general_file.xaml">
+      <RuleInjection>None</RuleInjection>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Rules\folder.xaml">
+      <RuleInjection>None</RuleInjection>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Rules\none.xaml">
+      <RuleInjection>None</RuleInjection>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Rules\scc.xaml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Rules\debugger_general.xaml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Rules\general.browseobject.xaml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Rules\script.xaml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Rules\script.browseobject.xaml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="BuildSystem\Rules\ScriptDebugger.xaml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BuildSystem\Tools\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Target Name="IncludeNuGetPackageReferences" AfterTargets="GetVsixSourceItems">
+    <ItemGroup>
+      <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'Gu.Wpf.NumericInput'" />
+      <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'BouncyCastle'" />
+      <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(ReferenceCopyLocalPaths.NuGetPackageId)').StartsWith('Nethereum'))" />
+      <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(ReferenceCopyLocalPaths.NuGetPackageId)').StartsWith('WPF-UI'))" />
+      <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(ReferenceCopyLocalPaths.NuGetPackageId)').StartsWith('Wpf.Ui.Markdown'))" />
+      <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(ReferenceCopyLocalPaths.NuGetPackageId)').StartsWith('Markdig'))" />
+      <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(ReferenceCopyLocalPaths.NuGetPackageId)').StartsWith('ColorCode'))" />
+    </ItemGroup>
+  </Target>
+  <!-- 
+  These are the parts of the custom project system which will be deployed as part of the 
+  final implementation, and provide the basic processing for handling rules in CPS.
+  -->
+  <!--
+  The XAML files provide buth compile-time implementations for CPS rules as well as
+  runtime information for property pages.  They will also be deployed as part of the
+  final package.
+  -->
+  <!-- TODO: This copies the build authoring to a well-known location so that on the machine this project builds on,
+       the projects created by the 3rd party consumer can open and build. But the real 3rd party consumer will not
+       have run this step so they won't be able to open their projects. 
+       To ship, the project type author must create an MSI that places these files in a well-known location on the
+       customer machine and update the project template to point at that location.-->
+</Project>
